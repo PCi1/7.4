@@ -24,6 +24,7 @@ class movie():
         movies_sorted=sorted(movies, key=lambda movie: (movie.title, movie.release_date))
         return movies_sorted
 
+# Funkcja która tworzy "losowy" film
     def random_movie_generator():
         all_movie_genres=["comedy", "horror", "criminal", "romance"]
         random_movie_names=["Hunter Of The Past", "Angel From Outer Space", "Agents Of Earth", "Creators On My Ship", "Soldiers And Aliens",
@@ -59,14 +60,15 @@ class series(movie):
         return shows_sorted
 
 # Funkcja która liczy wszystkie odcinki danego serialu
-    # def episode_counter():
-    #     show_name=input("Which series are you looking for?")
-    #     no_episodes=0
-    #     for i in library:
-    #         if isinstance(i, series)==True and i.title==show_name:
-    #             no_episodes+=1
-    #     return no_episodes
+    def episode_counter():
+        show_name=input("Which series are you looking for?")
+        no_episodes=0
+        for i in library:
+            if isinstance(i, series)==True and i.title==show_name:
+                no_episodes+=1
+        return no_episodes
 
+# Funkcja która tworzy "losowy" serial
     def random_series_generator():
         all_series_genres=["comedy", "horror", "criminal", "romance"]
         random_series_names=["Broken Dragon", "The Bare Snow", "Woman of Destruction", "The Slave's Time", "The Person of the Willow",
@@ -79,58 +81,58 @@ class series(movie):
         generated_series=series(title=series_title, release_date=release_year, genre=series_genre, views=0, episode_number=no_episode,season_number=no_season)
         return generated_series
 
+# Funkcja która dodaje pełne sezony serialu do biblioteki
+    def series_creator():  
+        show_list=[]
+        show_title=input("Name of the show:")
+        no_season=input("Which season?")
+        no_episodes=input("How many episodes?")
+        no_season_int=int(no_season)
+        no_episodes_int=int(no_episodes)
+        release_year=input("When was it released?")
+        show_genre=input("What genre is it?")
+        for i in range(no_episodes_int):
+            show_list.append(series(title=show_title, release_date=release_year, genre=show_genre, views=0, episode_number=i+1, season_number=no_season_int))
+        return show_list
+
 
 library=[]
 
 
 #Funkcja która wyszukuje film/serial po nazwie
 def search():
+    search_result=[]
     search=input("What movie or series are you looking for?")
     for i in library:
         if search==i.title:
-            print(i)
-
-
-
-
-# for i in series.get_series():
+            search_result.append(i)
+    return search_result
+# for i in (search()):
 #     print(i)
 
 # Funkcja która pozwala użytkownikowi wygenerować spersonalizowaną toplistę
-# def top_titles():
-#     content_type=input("Are you looking for series or a movie?")
-#     content_amount=input("How many recomendations would you like to see?")
-#     content_amount_int=int(content_amount)
-#     if content_type=="movie":
-#         movies=[]
-#         for i in library:
-#             if isinstance(i, series)==False:
-#                 movies.append(i)
-#         movies_popularity=sorted(movies, key=lambda movie: movie.views, reverse=True)
-#         return movies_popularity[:content_amount_int]
-#     elif content_type=="series":
-#         shows=[]
-#         for i in library:
-#             if isinstance(i, series)==True:
-#                 shows.append(i)
-#         shows_popularity=sorted(shows, key=lambda series: series.views, reverse=True)
-#         return shows_popularity[:content_amount_int]
+def top_titles():
+    content_type=input("Are you looking for series or a movie?")
+    content_amount=input("How many recomendations would you like to see?")
+    content_amount_int=int(content_amount)
+    if content_type=="movie":
+        movies=[]
+        for i in library:
+            if isinstance(i, series)==False:
+                movies.append(i)
+        movies_popularity=sorted(movies, key=lambda movie: movie.views, reverse=True)
+        return movies_popularity[:content_amount_int]
+    elif content_type=="series":
+        shows=[]
+        for i in library:
+            if isinstance(i, series)==True:
+                shows.append(i)
+        shows_popularity=sorted(shows, key=lambda series: series.views, reverse=True)
+        return shows_popularity[:content_amount_int]
+# for i in top_titles():
+#     print(i)
 
-# Funkcja która dodaje pełne sezony serialu do biblioteki
-# def series_creator():  
-#     show_list=[]
-#     show_title=input("Name of the show:")
-#     no_season=input("Which season?")
-#     no_episodes=input("How many episodes?")
-#     no_season_int=int(no_season)
-#     no_episodes_int=int(no_episodes)
-#     release_year=input("When was it released?")
-#     show_genre=input("What genre is it?")
-#     for i in range(no_episodes_int):
-#         show_list.append(series(title=show_title, release_date=release_year, genre=show_genre, views=0, episode_number=i+1, season_number=no_season_int))
-#     return show_list
-# library+=(series_creator())
-
+# Funkcja która zwraca filmy na podstawie najwyższej liczby odtworzeń
 def top_movies(amount):
     movies=[]
     for i in library:
@@ -139,6 +141,7 @@ def top_movies(amount):
     movies_popularity=sorted(movies, key=lambda movie: movie.views, reverse=True)
     return movies_popularity[:amount]
 
+# Funkcja która zwraca seriale na podstawie najwyższej liczby odtworzeń
 def top_series(amount):
     shows=[]
     for i in library:
@@ -147,14 +150,13 @@ def top_series(amount):
     shows_popularity=sorted(shows, key=lambda series: series.views, reverse=True)
     return shows_popularity[:amount]
 
+# Funkcja która generuje odtworzenia
 def generate_views():
     random_selection=random.choice(library)
     for i in range(random.randint(1,100)):
         random_selection.play()
 
-
-# print(series.episode_counter())
-
+# Funkcja która wypełnia bibliotekę losowymi filmami/serialami
 def library_generator():
     generated_content=[]
     amount_movies=random.randint(5,10)
@@ -165,6 +167,14 @@ def library_generator():
         generated_content.append(series.random_series_generator())
     return generated_content
 library+=(library_generator())
+
+
+
+# Wywołanie funkcji która dodaje sezony serialu do biblioteki
+# library+=(series.series_creator())
+
+# wywołanie funkcji która liczy odcinki serialu
+# print(series.episode_counter())
 
 
 print("Biblioteka filmów:")
